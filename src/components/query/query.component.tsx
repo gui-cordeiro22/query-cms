@@ -1,9 +1,5 @@
 // Dependencies
 import { FunctionComponent, useEffect, useState } from "react";
-import { Item, SiteClient } from "datocms-client";
-
-// Service
-import { API_Token } from "../../services/datoClient";
 
 // Styles
 import {
@@ -15,34 +11,31 @@ import {
 } from "./query.styles";
 
 export const Query: FunctionComponent = () => {
-  const [data, setData] = useState<Item[]>([]);
-  const [dataProduct, setDataProduct] = useState<Item[]>([]);
+  const [restaurants, setRestaurants] = useState<{
+    id: number;
+    Name: string;
+    Description: string;
+    createdAt: string;
+  }>();
+
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchData = async () => {
-      const client = new SiteClient(API_Token);
+      const response = await fetch(`${apiUrl}`);
+      if (!response.ok) {
+        throw new Error("Erro na requisição");
+      }
 
-      const recordsInformation = await client.items.all({
-        filter: {
-          type: "information",
-        },
-      });
-
-      const recordsProduct = await client.items.all({
-        filter: {
-          type: "product",
-        },
-      });
-
-      setData(recordsInformation);
-
-      setDataProduct(recordsProduct);
+      const result = await response.json();
+      setRestaurants(result.data);
+      console.log(result);
     };
 
     fetchData();
-  }, []);
+  }, [apiUrl]);
 
-  if (!data.length)
+  if (!restaurants)
     return (
       <Loader>
         <LoaderElement />
@@ -52,13 +45,10 @@ export const Query: FunctionComponent = () => {
   return (
     <Container>
       <ContentWrapper>
-        {data.map((item) => (
-          <Title>{item?.titlesection}</Title>
-        ))}
-
-        {dataProduct.map((product) => (
-          <p>{`${product?.productName} - R$${product?.productPrice}`}</p>
-        ))}
+        <Title>{restaurants.Name}</Title>
+        <p>{restaurants.Description}</p>
+        <br />
+        <p>{restaurants.createdAt}</p>
       </ContentWrapper>
     </Container>
   );
