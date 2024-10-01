@@ -37,6 +37,6 @@ export const CreatedAt = styled.p`
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    font-size: 8px;
+    font-size: 10px;
     color: #999;
 `;

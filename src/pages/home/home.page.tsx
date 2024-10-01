@@ -1,5 +1,6 @@
 // Dependencies
 import { FunctionComponent, useEffect, useState } from "react";
+import {format} from "date-fns";
 
 // Components
 import { Hero } from "../../components/sections/hero";
@@ -52,7 +53,7 @@ export const HomePage: FunctionComponent = () => {
     <>
       <Hero title={sectionData?.Title} subtitle={sectionData?.Subtitle} description={sectionData?.Description}/>
       <Content contentCards={restaurantListData?.map((restaurant, index) => (
-        <ContentCad key={restaurant.id} restaurantName={`${index + 1} - ${restaurant?.Name}`} description={restaurant?.Description} createdAt={restaurant?.createdAt}/>
+        <ContentCad key={restaurant.id} restaurantName={`${index + 1} - ${restaurant?.Name}`} description={restaurant?.Description} createdAt={`Criado em: ${format(new Date(restaurant?.createdAt), "dd/MM/yyyy")}`}/>
       ))}/>
       
     </>
