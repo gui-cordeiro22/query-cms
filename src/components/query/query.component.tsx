@@ -1,74 +1,76 @@
-// Dependencies
-import { FunctionComponent, useEffect, useState } from "react";
+// // Dependencies
+// import { FunctionComponent, useEffect, useState } from "react";
 
-// Styles
-import {
-  Container,
-  ContentWrapper,
-  Loader,
-  LoaderElement,
-  Title,
-} from "./query.styles";
+// // Styles
+// import {
+//   Container,
+//   ContentWrapper,
+//   Loader,
+//   LoaderElement,
+//   Title,
+// } from "./query.styles";
 
-export const Query: FunctionComponent = () => {
-  const [sectionData, setSectionData] = useState<{
-    id: number;
-    Name: string;
-    Description: string;
-    createdAt: string;
-  }>();
+// export const Query: FunctionComponent = () => {
+//   const [sectionData, setSectionData] = useState<{
+//     id: number;
+//     Title: string;
+//     Subtitle: string;
+//     Description: string;
+   
+//   }>();
 
-  const [restaurantListData, setRestaurantListData] = useState<
-    {
-      id: number;
-      Name: string;
-      Description: string;
-      createdAt: string;
-    }[]
-  >();
+//   const [restaurantListData, setRestaurantListData] = useState<
+//     {
+//       id: number;
+//       Name: string;
+//       Description: string;
+//       createdAt: string;
+//     }[]
+//   >();
 
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const allRestaurants = import.meta.env.VITE_API_URL_ALL_RESTAURANTS;
+//   const homeDataApi = import.meta.env.VITE_API_URL_HOME_DATA;
+//   const allRestaurants = import.meta.env.VITE_API_URL_ALL_RESTAURANTS;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const sectionResponse = await fetch(`${apiUrl}`);
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       const sectionResponse = await fetch(`${homeDataApi}`);
 
-      const restaurantsListResponse = await fetch(`${allRestaurants}`);
+//       const restaurantsListResponse = await fetch(`${allRestaurants}`);
 
-      if (!sectionResponse.ok && !restaurantsListResponse.ok) {
-        throw new Error("Erro na requisição");
-      }
+//       if (!sectionResponse.ok && !restaurantsListResponse.ok) {
+//         throw new Error("Erro na requisição");
+//       }
 
-      const sectionResult = await sectionResponse.json();
-      setSectionData(sectionResult.data);
+//       const sectionResult = await sectionResponse.json();
+//       setSectionData(sectionResult.data);
+//       console.log(sectionResult.data)
 
-      const restaurantsListResult = await restaurantsListResponse.json();
-      setRestaurantListData(restaurantsListResult.data);
+//       const restaurantsListResult = await restaurantsListResponse.json();
+//       setRestaurantListData(restaurantsListResult.data);
 
-      console.log(restaurantsListResult.data);
-    };
+//       console.log(restaurantsListResult.data);
+//     };
 
-    fetchData();
-  }, [allRestaurants, apiUrl]);
+//     fetchData();
+//   }, [allRestaurants, homeDataApi]);
 
-  if (!sectionData && !restaurantListData)
-    return (
-      <Loader>
-        <LoaderElement />
-      </Loader>
-    );
+//   if (!sectionData && !restaurantListData)
+//     return (
+//       <Loader>
+//         <LoaderElement />
+//       </Loader>
+//     );
 
-  return (
-    <Container>
-      <ContentWrapper>
-        <Title>{sectionData?.Name}</Title>
-        {restaurantListData?.map((restaurant) => (
-          <ul key={restaurant.id}>
-            <li>{restaurant.Name}</li>
-          </ul>
-        ))}
-      </ContentWrapper>
-    </Container>
-  );
-};
+//   return (
+//     <Container>
+//       <ContentWrapper>
+//         <Title>{sectionData?.Title}</Title>
+//         {restaurantListData?.map((restaurant) => (
+//           <ul key={restaurant.id}>
+//             <li>{restaurant.Name}</li>
+//           </ul>
+//         ))}
+//       </ContentWrapper>
+//     </Container>
+//   );
+// };
