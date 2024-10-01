@@ -6,14 +6,14 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { RouteValidator } from "./route-validator";
 
 // Pages
-const Query = lazy(() => import("../components/query"));
+const HomePage = lazy(() => import("../pages/home"));
 
 export const ApplicationRoutes: FunctionComponent = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense>
         <Routes>
-          <Route path="/" element={<RouteValidator component={Query} />} />
+          <Route path="/" element={<RouteValidator component={HomePage} />} />
 
           <Route path="*" element={<Navigate to={{ pathname: "/" }} />} />
         </Routes>

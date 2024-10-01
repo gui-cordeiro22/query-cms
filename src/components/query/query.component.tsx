@@ -11,31 +11,48 @@ import {
 } from "./query.styles";
 
 export const Query: FunctionComponent = () => {
-  const [restaurants, setRestaurants] = useState<{
+  const [sectionData, setSectionData] = useState<{
     id: number;
     Name: string;
     Description: string;
     createdAt: string;
   }>();
 
+  const [restaurantListData, setRestaurantListData] = useState<
+    {
+      id: number;
+      Name: string;
+      Description: string;
+      createdAt: string;
+    }[]
+  >();
+
   const apiUrl = import.meta.env.VITE_API_URL;
+  const allRestaurants = import.meta.env.VITE_API_URL_ALL_RESTAURANTS;
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${apiUrl}`);
-      if (!response.ok) {
+      const sectionResponse = await fetch(`${apiUrl}`);
+
+      const restaurantsListResponse = await fetch(`${allRestaurants}`);
+
+      if (!sectionResponse.ok && !restaurantsListResponse.ok) {
         throw new Error("Erro na requisição");
       }
 
-      const result = await response.json();
-      setRestaurants(result.data);
-      console.log(result);
+      const sectionResult = await sectionResponse.json();
+      setSectionData(sectionResult.data);
+
+      const restaurantsListResult = await restaurantsListResponse.json();
+      setRestaurantListData(restaurantsListResult.data);
+
+      console.log(restaurantsListResult.data);
     };
 
     fetchData();
-  }, [apiUrl]);
+  }, [allRestaurants, apiUrl]);
 
-  if (!restaurants)
+  if (!sectionData && !restaurantListData)
     return (
       <Loader>
         <LoaderElement />
@@ -45,10 +62,12 @@ export const Query: FunctionComponent = () => {
   return (
     <Container>
       <ContentWrapper>
-        <Title>{restaurants.Name}</Title>
-        <p>{restaurants.Description}</p>
-        <br />
-        <p>{restaurants.createdAt}</p>
+        <Title>{sectionData?.Name}</Title>
+        {restaurantListData?.map((restaurant) => (
+          <ul key={restaurant.id}>
+            <li>{restaurant.Name}</li>
+          </ul>
+        ))}
       </ContentWrapper>
     </Container>
   );
