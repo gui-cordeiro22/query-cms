@@ -8,6 +8,9 @@ import { Content } from "../../components/sections/content";
 import { ContentCard } from "../../components/content-card";
 import { LoaderComponent } from "../../components/elements/loader";
 
+// Services
+import { homeDataApi, allRestaurants } from "../../services/apiUrl";
+
 export const HomePage: FunctionComponent = () => {
   const [sectionData, setSectionData] = useState<{
     id: number;
@@ -27,32 +30,28 @@ export const HomePage: FunctionComponent = () => {
     }[]
   >();
   
-  const homeDataApi = import.meta.env.VITE_API_URL_HOME_DATA;
-  const allRestaurants = import.meta.env.VITE_API_URL_ALL_RESTAURANTS;
+  
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const sectionResponse = await fetch(`${homeDataApi}`);
-        const restaurantsListResponse = await fetch(`${allRestaurants}`);
-  
-        if (!sectionResponse.ok || !restaurantsListResponse.ok) {
-          throw new Error("Erro na requisição");
-        }
-  
-        const sectionResult = await sectionResponse.json();
-        setSectionData(sectionResult.data);
-        
-        const restaurantsListResult = await restaurantsListResponse.json();
-        setRestaurantListData(restaurantsListResult.data);
-        
-      } catch (error) {
-        console.error("Erro na busca:", error);
+      const sectionResponse = await fetch(`${homeDataApi}`);
+
+      const restaurantsListResponse = await fetch(`${allRestaurants}`);
+
+      if (!sectionResponse.ok && !restaurantsListResponse.ok) {
+        throw new Error("Erro na requisição");
       }
+
+      const sectionResult = await sectionResponse.json();
+      setSectionData(sectionResult.data);
+      
+      const restaurantsListResult = await restaurantsListResponse.json();
+      setRestaurantListData(restaurantsListResult.data);
+      
     };
-  
+
     fetchData();
-  }, [allRestaurants, homeDataApi]);
+  },[]);
 
   if (!sectionData && !restaurantListData) {
     return <LoaderComponent />
