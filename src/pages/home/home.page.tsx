@@ -47,7 +47,7 @@ export const HomePage: FunctionComponent = () => {
         setRestaurantListData(restaurantsListResult.data);
         
       } catch (error) {
-        console.error("Erro ao buscar os dados:", error);
+        console.error("Erro na busca:", error);
       }
     };
   
