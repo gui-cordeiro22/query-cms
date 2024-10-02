@@ -37,6 +37,7 @@ export const Name = styled.h4`
 `
 
 export const Description = styled.p`
+  text-align: left;
   font-size: 16px;
   line-height: 1.5;
   color: #333;
