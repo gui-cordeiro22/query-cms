@@ -1,3 +1,3 @@
-import { ContentCad } from "./content-card.component";
+import { ContentCard } from "./content-card.component";
 
-export {ContentCad}
+export {ContentCard}

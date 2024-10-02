@@ -3,12 +3,12 @@ import { FunctionComponent } from "react";
 
 
 // Styles
-import { Container, ContentWrapper, CreatedAt, Description, Name } from "./content-card.styles";
+import { Container, ContentWrapper, Details, Description, Name, DetailsWrapper } from "./content-card.styles";
 
 // Types
 import { ContentCardProps } from "./content-card.types";
 
-export const ContentCad: FunctionComponent<ContentCardProps> = ({restaurantName,description,createdAt}) => {
+export const ContentCard: FunctionComponent<ContentCardProps> = ({restaurantName,description,createdAt,updatedAt}) => {
     return (
         <Container>
             <ContentWrapper>
@@ -20,9 +20,15 @@ export const ContentCad: FunctionComponent<ContentCardProps> = ({restaurantName,
                     {description}
                 </Description>
                 
-                <CreatedAt>
-                    {createdAt}
-                </CreatedAt>
+                <DetailsWrapper>
+                    <Details>
+                        {createdAt}
+                    </Details>
+
+                    <Details>
+                        {updatedAt}
+                    </Details>
+                </DetailsWrapper>
                     
             </ContentWrapper>
         </Container>

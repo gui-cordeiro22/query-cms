@@ -5,7 +5,8 @@ import {format} from "date-fns";
 // Components
 import { Hero } from "../../components/sections/hero";
 import { Content } from "../../components/sections/content";
-import { ContentCad } from "../../components/content-card";
+import { ContentCard } from "../../components/content-card";
+import { LoaderComponent } from "../../components/elements/loader";
 
 export const HomePage: FunctionComponent = () => {
   const [sectionData, setSectionData] = useState<{
@@ -22,6 +23,7 @@ export const HomePage: FunctionComponent = () => {
       Name: string;
       Description: string;
       createdAt: string;
+      updatedAt: string;
     }[]
   >();
   
@@ -48,12 +50,16 @@ export const HomePage: FunctionComponent = () => {
 
     fetchData();
   }, [allRestaurants, homeDataApi]);
+
+  if (!sectionData && !restaurantListData) {
+    return <LoaderComponent />
+  }
   
   return (
     <>
       <Hero title={sectionData?.Title} subtitle={sectionData?.Subtitle} description={sectionData?.Description}/>
-      <Content contentCards={restaurantListData?.map((restaurant, index) => (
-        <ContentCad key={restaurant.id} restaurantName={`${index + 1} - ${restaurant?.Name}`} description={restaurant?.Description} createdAt={`Criado em: ${format(new Date(restaurant?.createdAt), "dd/MM/yyyy")}`}/>
+      <Content contentCards={restaurantListData?.sort((a,b) => a.id - b.id).map(restaurant => (
+        <ContentCard key={restaurant.id} restaurantName={`${restaurant.id} - ${restaurant?.Name}`} description={restaurant?.Description} createdAt={`Criado em: ${format(new Date(restaurant?.createdAt), "dd/MM/yyyy")}`} updatedAt={`Última atualização em: ${format(new Date(restaurant?.updatedAt), "dd/MM/yyyy")}`}/>
       ))}/>
       
     </>
