@@ -32,22 +32,25 @@ export const HomePage: FunctionComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const sectionResponse = await fetch(`${homeDataApi}`);
-
-      const restaurantsListResponse = await fetch(`${allRestaurants}`);
-
-      if (!sectionResponse.ok && !restaurantsListResponse.ok) {
-        throw new Error("Erro na requisição");
+      try {
+        const sectionResponse = await fetch(`${homeDataApi}`);
+        const restaurantsListResponse = await fetch(`${allRestaurants}`);
+  
+        if (!sectionResponse.ok || !restaurantsListResponse.ok) {
+          throw new Error("Erro na requisição");
+        }
+  
+        const sectionResult = await sectionResponse.json();
+        setSectionData(sectionResult.data);
+        
+        const restaurantsListResult = await restaurantsListResponse.json();
+        setRestaurantListData(restaurantsListResult.data);
+        
+      } catch (error) {
+        console.error("Erro ao buscar os dados:", error);
       }
-
-      const sectionResult = await sectionResponse.json();
-      setSectionData(sectionResult.data);
-      
-      const restaurantsListResult = await restaurantsListResponse.json();
-      setRestaurantListData(restaurantsListResult.data);
-      
     };
-
+  
     fetchData();
   }, [allRestaurants, homeDataApi]);
 
