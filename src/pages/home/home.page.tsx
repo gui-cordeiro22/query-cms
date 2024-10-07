@@ -29,8 +29,6 @@ export const HomePage: FunctionComponent = () => {
       updatedAt: string;
     }[]
   >();
-  
-  
 
   useEffect(() => {
     const fetchData = async () => {
