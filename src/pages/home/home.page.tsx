@@ -9,7 +9,7 @@ import { ContentCard } from "../../components/content-card";
 import { LoaderComponent } from "../../components/elements/loader";
 
 // Services
-import { homeDataApi, allRestaurants } from "../../services/apiUrl";
+import { homeDataApi, allRestaurants, apiToken } from "../../services/apiUrl";
 
 export const HomePage: FunctionComponent = () => {
   const [sectionData, setSectionData] = useState<{
@@ -34,24 +34,43 @@ export const HomePage: FunctionComponent = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const sectionResponse = await fetch(`${homeDataApi}`);
+      try {
+        
+        const sectionResponse = await fetch(`${homeDataApi}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+            "Content-Type": "application/json",
+          },
+        });
 
-      const restaurantsListResponse = await fetch(`${allRestaurants}`);
+        
+        const restaurantsListResponse = await fetch(`${allRestaurants}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${apiToken}`,
+            "Content-Type": "application/json",
+          },
+        });
 
-      if (!sectionResponse.ok && !restaurantsListResponse.ok) {
-        throw new Error("Erro na requisição");
+        
+        if (!sectionResponse.ok || !restaurantsListResponse.ok) {
+          throw new Error("Erro na requisição");
+        }
+
+       
+        const sectionResult = await sectionResponse.json();
+        setSectionData(sectionResult.data);
+
+        const restaurantsListResult = await restaurantsListResponse.json();
+        setRestaurantListData(restaurantsListResult.data);
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
       }
-
-      const sectionResult = await sectionResponse.json();
-      setSectionData(sectionResult.data);
-      
-      const restaurantsListResult = await restaurantsListResponse.json();
-      setRestaurantListData(restaurantsListResult.data);
-      
     };
 
     fetchData();
-  },[]);
+  }, []);
 
   if (!sectionData && !restaurantListData) {
     return <LoaderComponent />
