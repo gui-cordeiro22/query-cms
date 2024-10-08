@@ -1,6 +1,10 @@
-// Data
-export const homeDataApi = import.meta.env.VITE_API_URL_HOME_DATA;
-export const allRestaurants = import.meta.env.VITE_API_URL_ALL_RESTAURANTS;
+// Dependencies
+import axios from 'axios';
 
-// Token
-export const apiToken = import.meta.env.VITE_API_TOKEN;
+export const restAPI = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+      Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+});

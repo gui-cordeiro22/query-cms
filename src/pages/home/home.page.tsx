@@ -9,59 +9,31 @@ import { ContentCard } from "../../components/content-card";
 import { LoaderComponent } from "../../components/elements/loader";
 
 // Services
-import { homeDataApi, allRestaurants, apiToken } from "../../services/apiUrl";
+import { restAPI } from "../../services/apiUrl";
+
+// Types
+import { RestaurantListDataTypes, SectionDataTypes } from "./home.types";
 
 export const HomePage: FunctionComponent = () => {
-  const [sectionData, setSectionData] = useState<{
-    id: number;
-    Title: string;
-    Subtitle: string;
-    Description: string;
-   
-  }>();
+  const [sectionData, setSectionData] = useState<SectionDataTypes>();
 
-  const [restaurantListData, setRestaurantListData] = useState<
-    {
-      id: number;
-      Name: string;
-      Description: string;
-      createdAt: string;
-      updatedAt: string;
-    }[]
-  >();
+  const [restaurantListData, setRestaurantListData] = useState<RestaurantListDataTypes>();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         
-        const sectionResponse = await fetch(`${homeDataApi}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const sectionResponse =  await restAPI.get(`/home`)
 
-        
-        const restaurantsListResponse = await fetch(`${allRestaurants}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-            "Content-Type": "application/json",
-          },
-        });
+        const restaurantsListResponse = await restAPI.get(`/restaurants`)
 
-        
-        if (!sectionResponse.ok || !restaurantsListResponse.ok) {
+        if (sectionResponse.status !== 200 || restaurantsListResponse.status !== 200) {
           throw new Error("Erro na requisição");
         }
-
-       
-        const sectionResult = await sectionResponse.json();
-        setSectionData(sectionResult.data);
-
-        const restaurantsListResult = await restaurantsListResponse.json();
-        setRestaurantListData(restaurantsListResult.data);
+        
+        setSectionData(sectionResponse.data.data);
+        
+        setRestaurantListData(restaurantsListResponse.data.data);
       } catch (error) {
         console.error("Erro ao buscar dados:", error);
       }
@@ -73,7 +45,7 @@ export const HomePage: FunctionComponent = () => {
   if (!sectionData && !restaurantListData) {
     return <LoaderComponent />
   }
-  
+ 
   return (
     <>
       <Hero title={sectionData?.Title} subtitle={sectionData?.Subtitle} />
